@@ -14,3 +14,6 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->get('/webhook', 'BotController@verify_token');
+$app->post('/webhook', 'BotController@handle_query');
