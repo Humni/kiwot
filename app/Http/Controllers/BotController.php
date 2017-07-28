@@ -26,8 +26,8 @@ class BotController extends Controller
      */
     public function verify_token(Request $request)
     {
-        $mode  = $request->get('hub_mode');
-        $token = $request->get('hub_verify_token');
+        $mode  = $request->get('hub.mode');
+        $token = $request->get('hub.verify_token');
 
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
             return response($request->get('hub_challenge'));
