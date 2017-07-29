@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
-include_once('geoPHP.inc');
+include_once('../../../vendor/phayes/geophp/geoPHP.inc');
 
 use Illuminate\Http\Request;
 
