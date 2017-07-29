@@ -50,6 +50,7 @@ class BotController extends Controller
     {
         Log::debug("Handle Query:: Post data: " . json_encode($_POST));
         Log::debug("Handle Query:: Get data: " . json_encode($_GET));
+        Log::debug("Handle Query:: Request data: " . json_encode($request));
 //        $entry = $_GET['entry'];
 
 //        $sender  = array_get($entry, '0.messaging.0.sender.id');
