@@ -27,21 +27,14 @@ class BotController extends Controller
      */
     public function verify_token(Request $request)
     {
-        $mode  = $request->get('hub.mode');
-        $token = $request->get('hub.verify_token');
+        $mode  = $_GET['hub_mode'];
+        $token = $_GET['hub_verify_token'];
 
-        $modei  = $request->input('hub.mode');
-        $tokeni = $request->input('hub.verify_token');
-
-        Log::debug("Request: " . json_encode($request));
-        Log::debug("get: " . json_encode($_GET));
         Log::debug("$mode: " . json_encode($mode));
         Log::debug("$token: " . json_encode($token));
-        Log::debug("$modei: " . json_encode($modei));
-        Log::debug("$tokeni: " . json_encode($tokeni));
 
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
-            return response($request->get('hub.challenge'));
+            return response($_GET['hub.challenge']);
         }
 
         return response("Invalid token!", 400);
@@ -55,7 +48,7 @@ class BotController extends Controller
      */
     public function handle_query(Request $request)
     {
-        $entry = $request->get('entry');
+        $entry = $_GET['entry'];
 
         $sender  = array_get($entry, '0.messaging.0.sender.id');
         // $message = array_get($entry, '0.messaging.0.message.text');
