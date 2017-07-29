@@ -48,7 +48,7 @@ class BotController extends Controller
      */
     public function handle_query(Request $request)
     {
-        dd($request->getContent());
+        Log::debug($request->getContent());
         $request = $request->getContent();
         $entry = $request['entry'];
 
