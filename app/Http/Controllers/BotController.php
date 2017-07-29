@@ -48,6 +48,8 @@ class BotController extends Controller
      */
     public function handle_query(Request $request)
     {
+        Log::debug("Handle Query:: Post data: " . $_POST);
+        Log::debug("Handle Query:: Get data: " . $_GET);
         $entry = $_GET['entry'];
 
         $sender  = array_get($entry, '0.messaging.0.sender.id');
