@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Conversations;
-use App\Messages;
+use App\Models\Conversations;
+use App\Models\Messages;
 use App\TextHelper;
 use Carbon\Carbon;
 use Log;
