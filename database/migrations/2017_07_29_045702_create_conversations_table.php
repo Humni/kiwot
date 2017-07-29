@@ -13,7 +13,7 @@ class CreateConversationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('conversations', function (Blueprint $table) {
+        Schema::create('conversations', function (Blueprint $table) {
             $table->bigIncrements('conversation_id');
             $table->bigInteger('user_id');
             $table->text('subject')->nullable();
