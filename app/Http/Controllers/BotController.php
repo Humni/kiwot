@@ -91,7 +91,7 @@ class BotController extends Controller
             $location = $message->attachments[0]->payload->coordinates;
 
             $conversation->lat = $location->lat;
-            $conversation->lon = $location->lon;
+            $conversation->lon = $location->long;
             $conversation->save();
 
             $this->dispatchResponse($sender, "Arr, your the best! Now what do you want?");
