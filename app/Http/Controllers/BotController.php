@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class BotController extends Controller
 {
@@ -30,8 +30,13 @@ class BotController extends Controller
         $mode  = $request->get('hub.mode');
         $token = $request->get('hub.verify_token');
 
-        echo ("External Token: " . $token);
-        echo ("External Mode: " . $mode);
+        echo $request->get('hub_mode');
+        echo $request->get('hub_verify_token');
+
+        echo json_encode($request->all());
+
+        echo ("External Token: " . $token . PHP_EOL);
+        echo ("External Mode: " . $mode . PHP_EOL);
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
             return response($request->get('hub.challenge'));
         }
