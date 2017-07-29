@@ -34,6 +34,7 @@ class BotController extends Controller
         $tokeni = $request->input('hub.verify_token');
 
         Log::debug("Request: " . json_encode($request));
+        Log::debug("get: " . json_encode($_GET));
         Log::debug("$mode: " . json_encode($mode));
         Log::debug("$token: " . json_encode($token));
         Log::debug("$modei: " . json_encode($modei));
