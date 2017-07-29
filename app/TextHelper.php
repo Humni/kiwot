@@ -64,7 +64,7 @@ class TextHelper {
             if ($type == "HUNT") {
                 $message = "HUNTING";
 
-                $message = HuntingHelper::hunt();
+                //$message = HuntingHelper::hunt();
 
             } else if ($type == "SWIM") {
                 $message = "SWIMMING";

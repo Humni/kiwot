@@ -8,7 +8,6 @@ class HuntingHelper
 
     public static function hunt(Request $request)
     {
-
         $lat = (float)$request->input('lat');
         $long = (float)$request->input('long');
         $message = $request->input('message');
