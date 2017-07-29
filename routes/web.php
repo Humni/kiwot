@@ -19,5 +19,5 @@ $app->get('/webhook', 'BotController@verify_token');
 $app->post('/webhook', 'BotController@handle_query');
 
 
-
 $app->get('/dev/geophp', 'DevController@geophp');
+$app->get('/hunt', 'HuntingController@test');
