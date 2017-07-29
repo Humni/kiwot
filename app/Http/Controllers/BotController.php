@@ -53,6 +53,7 @@ class BotController extends Controller
         $entry = $request->entry;
 
         $sender  = array_get($entry, '0.messaging.0.sender.id');
+        Log::debug("Sender id" . $sender);
         $message = array_get($entry, '0.messaging.0.message.text');
 
         $this->dispatchResponse($sender, 'Hello world. You can customise my response.');
