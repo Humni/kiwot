@@ -59,7 +59,7 @@ class BotController extends Controller
         Log::debug("Sender id: " . $sender);
         Log::debug("Incoming message: " . $message);
 
-        $this->dispatchResponse($sender, 'Hello world. You can customise my response.');
+        $this->dispatchResponse($sender, 'Hello, I am Captain Jack!');
 
         return response('', 200);
     }
