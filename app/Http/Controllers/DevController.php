@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
-include_once('../../../vendor/phayes/geophp/geoPHP.inc');
-
+use geoPHP;
 use Illuminate\Http\Request;
 
 class DevController extends Controller
