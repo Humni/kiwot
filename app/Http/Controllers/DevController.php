@@ -6,6 +6,8 @@ use Log;
 use geoPHP;
 use Illuminate\Http\Request;
 use App\Models\HuntingAreas;
+use App\Models\Drowning;
+
 
 
 // Latitude is Y
@@ -30,10 +32,10 @@ class DevController extends Controller
 
         if ($type == "hunt") {
             return DevController::handleHunt($lat, $long);
-        } else if ($type == "drown") {
+        } else if ($type == "fish") {
             return DevController::handleFish($lat, $long);
 
-        } else if ($type == "fish") {
+        } else if ($type == "drown") {
             return DevController::handleDrown($lat, $long);
 
         } else {
@@ -78,6 +80,39 @@ class DevController extends Controller
     }
 
     public function handleDrown($lat, $long) {
+
+        // Parse the user location into a geoPHO point
+        $userLocation = geoPHP::load("POINT(" . $lat . " " . $long . ")", "wkt");
+
+
+        $closeness = .01;
+
+
+        $xSmall = $long - $closeness;
+        $xLarge = $long + $closeness;
+
+
+        $ySmall = $lat - $closeness;
+        $yLarge = $lat + $closeness;
+
+        // Do a basic prefilter on the latitude.
+        $allLocations = Drowning::where('x', '>', $xSmall)->where('x', '<', $xLarge)->where('y', '>', $ySmall)->where('y', '<', $yLarge)->get();
+
+
+        $output = "";
+        // Look through the possible locations, and see if the point is in the block.
+        foreach ($allLocations as $location) {
+
+            $output .= "A drowning occurred from " . $location->Activity . " in " . $location->Year . " near here.  ";
+
+
+        }
+
+        if ($output != '') {
+            return $output;
+        }
+
+        return "Great news - no drownings have taken place near you - however, you should always check for rips, and currents. You can learn more about water safety here: http://www.watersafety.org.nz/resources-and-safety-tips/ ";
 
 
 
