@@ -6,10 +6,8 @@ use geoPHP;
 class HuntingHelper
 {
 
-
     public static function hunt(Request $request)
     {
-
 
         $lat = (float)$request->input('lat');
         $long = (float)$request->input('long');
@@ -40,7 +38,7 @@ class HuntingHelper
             if ($geo->contains($userLocation)) {
                 echo "location";
 
-                return "You can hunt here! You are in the " . $location->HuntBlockName . ' area.  Remember though - you will need a permit first. ';
+                return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
 
                 break;
 
@@ -50,10 +48,7 @@ class HuntingHelper
             $location = null;
             $code = null;
 
-            return "You are not in any DOC hunting areas, which means you will need to ask the land owner first if you can hunt in your current location. ';
-
-
+            return "You are not in any DOC hunting areas, which means you will need to ask the land owner first if you can hunt in your current location. ";
         }
     }
-
 }
