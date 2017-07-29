@@ -100,15 +100,19 @@ class BotController extends Controller
             Log::debug("Sender id: " . $sender);
             Log::debug("Incoming message: " . $message_text);
         } else if(isset($message->attachments)){
-            //update the users location
-            $location = $message->attachments[0]->payload->coordinates;
+            if($message->attachments[0]->type == "location"){
+                //update the users location
+                $location = $message->attachments[0]->payload->coordinates;
 
-            $conversation->lat = $location->lat;
-            $conversation->lon = $location->long;
-            $conversation->last_active = Carbon::now();
-            $conversation->save();
+                $conversation->lat = $location->lat;
+                $conversation->lon = $location->long;
+                $conversation->last_active = Carbon::now();
+                $conversation->save();
 
-            $this->dispatchResponse($sender, "Arr, you're the best! Now what do you want?");
+                $this->dispatchResponse($sender, "Arr, you're the best! Now what do you want?");
+            } else {
+                $this->dispatchResponse($sender, "Arr, that is pretty cool!");
+            }
             return response('', 200);
         } else {
             //unknown respose
