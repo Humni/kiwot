@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BotController extends Controller
 {
@@ -16,6 +17,7 @@ class BotController extends Controller
     public function __construct()
     {
         $this->token = env('BOT_VERIFY_TOKEN');
+        Log::debug("Token: " . $this->token);
     }
 
     /**
@@ -29,8 +31,10 @@ class BotController extends Controller
         $mode  = $request->get('hub.mode');
         $token = $request->get('hub.verify_token');
 
+        Log::debug("External Token: " . $token);
+        Log::debug("External Mode: " . $mode);
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
-            return response($request->get('hub_challenge'));
+            return response($request->get('hub.challenge'));
         }
 
         return response("Invalid token!", 400);
