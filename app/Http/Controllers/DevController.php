@@ -10,9 +10,9 @@ class DevController extends Controller
 {
     public function geophp(Request $request)
     {
-        if (geoPHP::geosInstalled()) {
+        if(geoPHP::geosInstalled()) {
             return response("We can't work anything out at the moment!", 200);
         }
-        return response("GeoPHP is not installed", 400);
+        return response("GeoPHP is not installed: " . geoPHP::geosInstalled(), 400);
     }
 }
