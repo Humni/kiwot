@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversations;
+use App\Messages;
+use App\TextHelper;
+use Carbon\Carbon;
 use Log;
 use Illuminate\Http\Request;
 
@@ -13,6 +17,8 @@ class BotController extends Controller
      * @var string
      */
     protected $token;
+
+    protected $current_message;
 
     public function __construct()
     {
@@ -61,7 +67,41 @@ class BotController extends Controller
 
         $this->dispatchTyping($sender);
 
-        $this->dispatchResponse($sender, 'Hello, I am Captain Jack!');
+        //Do all the processing in here
+
+        //log the messages
+        $message_log = new Messages([
+            'user_id' => $sender,
+            'received' => $message
+        ]);
+
+        $message_log->save();
+
+        $this->current_message = $message_log;
+
+
+        //check for existing conversation with the user_id
+        $conversation = Conversations::where('user_id', $sender)->first();
+        if(empty($conversation)){
+            //create a new conversation
+            $conversation = new Conversations([
+                'user_id' => $sender,
+                'last_active' => Carbon::now()
+            ]);
+            $conversation->save();
+
+            //prompt the user with the first interactions
+            $this->dispatchLocationRequest($sender);
+        } else {
+            $conversation->last_active = Carbon::now();
+            $conversation->save();
+
+            //get the appropriate reply
+            $reply = TextHelper::readMessage($message->text);
+
+            //send the reply
+            $this->dispatchResponse($sender, $reply);
+        }
 
         return response('', 200);
     }
@@ -96,13 +136,16 @@ class BotController extends Controller
 
     protected function dispatchLocationRequest($id)
     {
+        $this->current_message->replied = "Please share your location";
+        $this->current_message->save();
+
         $access_token = env('BOT_PAGE_ACCESS_TOKEN');
         $url = "https://graph.facebook.com/v2.10/me/messages?access_token={$access_token}";
 
         $data = json_encode([
             'recipient' => ['id' => $id],
             "message" => [
-                "text" => "Please share your location:",
+                "text" => "Arrrh! It looks like we don't have yer location! Please send us yer location",
                 "quick_replies" => [
                     [
                         "content_type" => "location",
@@ -130,6 +173,9 @@ class BotController extends Controller
      */
     protected function dispatchResponse($id, $response)
     {
+        $this->current_message->replied = $response;
+        $this->current_message->save();
+
         $access_token = env('BOT_PAGE_ACCESS_TOKEN');
         $url = "https://graph.facebook.com/v2.10/me/messages?access_token={$access_token}";
 

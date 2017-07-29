@@ -8,6 +8,11 @@ use App\HuntingHelper;
 class TextHelper {
 
 
+    /**
+     * returns all the possible questions you can ask
+     *
+     * @param $array
+     */
     public static function returnQuestionsText($array)
     {
 
@@ -23,13 +28,14 @@ class TextHelper {
         $output .= ' Go on - give it a go!';
 
     }
+
+    /**
+     * Get the appropriate reply
+     *
+     * @param $inMessage
+     */
     public static function readMessage($inMessage) {
-
-
         $message = new stdClass();
-
-
-
 
         if (strpos(strtolower($inMessage), 'can') !== false) {
             $mode = "question";
@@ -93,10 +99,7 @@ class TextHelper {
 
         }
 
-         var_dump ($message);
-
-
-
+         return $message;
     }
 
 }
