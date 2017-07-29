@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversations extends Model
 {
-    protected $table = 'messages';
+    protected $table = 'conversations';
 
     protected $primaryKey = 'conversation_id';
 
