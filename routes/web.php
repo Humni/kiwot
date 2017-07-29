@@ -20,4 +20,4 @@ $app->post('/webhook', 'BotController@handle_query');
 
 
 $app->get('/dev/geophp', 'DevController@geophp');
-$app->get('/hunt', 'HuntingController@test');
+$app->get('/devTest', 'DevController@parseMessage');
