@@ -66,7 +66,7 @@ class TextHelper {
 
 
             if ($type == "HUNT") {
-                $message = "HUNTING";
+                $message = TextHelper::hunting($lat, $long);
 
                 //$message = HuntingHelper::hunt();
 
@@ -133,5 +133,29 @@ class TextHelper {
         return "Great news - no drownings have taken place near you - however, you should always check for rips, and currents. You can learn more about water safety here: http://www.watersafety.org.nz/resources-and-safety-tips/ ";
     }
 
+
+    /**
+     * Drowning helper function
+     */
+    public static function hunting($lat, $long) {
+        // Parse the user location into a geoPHO point
+        $userLocation = geoPHP::load("POINT(" . $lat . " " . $long . ")", "wkt");
+
+        // Do a basic prefilter on the latitude.
+        $allLocations = HuntingAreas::where('miny', '<', $lat)->where('maxy', '>', $lat)->get();
+
+        if (!geoPHP::geosInstalled()) {
+            return "We can't work anything out at the moment!";
+        }
+
+        // Look through the possible locations, and see if the point is in the block.
+        foreach ($allLocations as $location) {
+
+            $geo = geoPHP::load($location->WKT, 'wkt');
+            if ($geo->contains($userLocation)) {
+                return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
+            }
+        }
+    }
 }
 
