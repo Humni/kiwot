@@ -108,8 +108,7 @@ class BotController extends Controller
 
         $data = json_encode([
             'recipient' => ['id' => $id],
-            'message'   => ['text' => $response],
-            "sender_action" => "typing_off"
+            'message'   => ['text' => $response]
         ]);
 
         $ch = curl_init($url);
