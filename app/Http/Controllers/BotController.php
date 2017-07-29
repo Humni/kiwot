@@ -28,13 +28,14 @@ class BotController extends Controller
      */
     public function verify_token(Request $request)
     {
-        $mode  = $request->get('hub.mode');
-        $token = $request->get('hub.verify_token');
+        $mode  = $request->get('hub_mode');
+        $token = $request->get('hub_verify_token');
 
         Log::debug("External Token: " . $token);
         Log::debug("External Mode: " . $mode);
+        Log::debug("External Mode: " . $request->get());
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
-            return response($request->get('hub.challenge'));
+            return response($request->get('hub_challenge'));
         }
 
         return response("Invalid token!", 400);
