@@ -49,8 +49,9 @@ class BotController extends Controller
     public function handle_query(Request $request)
     {
         Log::debug($request->getContent());
-        $request = $request->getContent();
-        $entry = $request['entry'];
+        $request = json_decode($request->getContent());
+        Log::debug($request);
+        $entry = $request->entry;
 
         $sender  = array_get($entry, '0.messaging.0.sender.id');
         $message = array_get($entry, '0.messaging.0.message.text');
