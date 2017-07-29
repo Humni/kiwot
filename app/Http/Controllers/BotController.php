@@ -51,10 +51,11 @@ class BotController extends Controller
         Log::debug("Handle Query:: Post data: " . json_encode($_POST));
         Log::debug("Handle Query:: Get data: " . json_encode($_GET));
         Log::debug("Handle Query:: Request data: " . json_encode($request));
-//        $entry = $_GET['entry'];
+        Log::debug("Handle Query:: Request body: " . json_encode($request->getContent()));
+        $entry = $_GET['entry'];
 
-//        $sender  = array_get($entry, '0.messaging.0.sender.id');
-        // $message = array_get($entry, '0.messaging.0.message.text');
+        $sender  = array_get($entry, '0.messaging.0.sender.id');
+         $message = array_get($entry, '0.messaging.0.message.text');
 
         $this->dispatchResponse('Hello world. You can customise my response.');
 
@@ -68,14 +69,13 @@ class BotController extends Controller
      * @param  string  $response
      * @return bool
      */
-    //protected function dispatchResponse($id, $response)
-    protected function dispatchResponse($response)
+    protected function dispatchResponse($id, $response)
     {
         $access_token = env('BOT_PAGE_ACCESS_TOKEN');
-        $url = "https://graph.facebook.com/v2.6/me/messages?access_token={$access_token}";
+        $url = "https://graph.facebook.com/v2.10/me/messages?access_token={$access_token}";
 
         $data = json_encode([
-//            'recipient' => ['id' => $id],
+            'recipient' => ['id' => $id],
             'message'   => ['text' => $response]
         ]);
 
