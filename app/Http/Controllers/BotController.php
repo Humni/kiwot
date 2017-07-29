@@ -48,13 +48,14 @@ class BotController extends Controller
      */
     public function handle_query(Request $request)
     {
-        Log::debug("Handle JSON:: Request body: " . json_decode($request->getContent(), true));
+        Log::debug("Handle JSON:: Request body: " . $request->getContent());
+        $request = json_decode($request->getContent(), true);
         $entry = $request->getContent()['entry'];
 
         $sender  = array_get($entry, '0.messaging.0.sender.id');
         $message = array_get($entry, '0.messaging.0.message.text');
 
-        $this->dispatchResponse('Hello world. You can customise my response.');
+        $this->dispatchResponse($sender, 'Hello world. You can customise my response.');
 
         return response('', 200);
     }
