@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
+use geoPHP;
 use Illuminate\Http\Request;
 
 class DevController extends Controller
