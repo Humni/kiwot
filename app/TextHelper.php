@@ -35,7 +35,7 @@ class TextHelper {
      * @param $inMessage
      */
     public static function readMessage($inMessage) {
-        $message = new stdClass();
+        $message = "Error! This wasn't supposed to happen";
 
         if (strpos(strtolower($inMessage), 'can') !== false) {
             $mode = "question";
@@ -62,19 +62,19 @@ class TextHelper {
 
 
             if ($type == "HUNT") {
-                $message->text = "HUNTING";
+                $message = "HUNTING";
 
-                $message->text = HuntingHelper::hunt();
+                $message = HuntingHelper::hunt();
 
             } else if ($type == "SWIM") {
-                $message->text = "SWIMMING";
+                $message = "SWIMMING";
 
             } else if ($type == 'FISH') {
-                $message->text = "FISHING";
+                $message = "FISHING";
 
             } else {
                 //$message = FacebookMessage::create();
-                $message->text = "I don't know the answer to that question. " . TextHelper::returnQuestionsText($array);
+                $message = "I don't know the answer to that question. " . TextHelper::returnQuestionsText($array);
 
 
             }
@@ -84,18 +84,18 @@ class TextHelper {
 
         } else if ($mode == "thank") {
             //$message = FacebookMessage::create();
-            $message->text = "You're welcome.";
+            $message = "You're welcome.";
 
 
         } else if ($mode == "um") {
 
           //  $message = FacebookMessage::create();
-            $message->text = "Yikes! I'm not sure what you mean by that...";
+            $message = "Yikes! I'm not sure what you mean by that...";
 
 
         } else {
          //   $message = FacebookMessage::create();
-            $message->text = "Yikes! I'm not sure what you mean.";
+            $message = "Yikes! I'm not sure what you mean.";
 
         }
 

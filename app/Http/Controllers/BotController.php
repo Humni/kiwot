@@ -97,7 +97,7 @@ class BotController extends Controller
             $conversation->save();
 
             //get the appropriate reply
-            $reply = TextHelper::readMessage($message->text);
+            $reply = TextHelper::readMessage($message);
 
             //send the reply
             $this->dispatchResponse($sender, $reply);
