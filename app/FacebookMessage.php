@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class HuntingAreas extends Model
+class FacebookMessage extends Model
 {
-    protected $table = 'hunting_areas_nz';
+    //protected $table = 'hunting_areas_nz';
 
     public $timestamps = false;
 
