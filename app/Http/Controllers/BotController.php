@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class BotController extends Controller
 {
@@ -17,7 +17,6 @@ class BotController extends Controller
     public function __construct()
     {
         $this->token = env('BOT_VERIFY_TOKEN');
-        Log::debug("Token: " . $this->token);
     }
 
     /**
@@ -28,14 +27,13 @@ class BotController extends Controller
      */
     public function verify_token(Request $request)
     {
-        $mode  = $request->input('hub.mode');
-        $token = $request->input('hub.verify_token');
+        $mode  = $request->get('hub.mode');
+        $token = $request->get('hub.verify_token');
 
-        Log::debug("External Token: " . $token);
-        Log::debug("External Mode: " . $mode);
-        Log::debug("External All: " . json_encode($request->all()));
+        echo ("External Token: " . $token);
+        echo ("External Mode: " . $mode);
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
-            return response($request->input('hub.challenge'));
+            return response($request->get('hub.challenge'));
         }
 
         return response("Invalid token!", 400);
