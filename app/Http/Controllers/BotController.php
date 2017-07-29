@@ -50,12 +50,13 @@ class BotController extends Controller
     {
         Log::debug($request->getContent());
         $request = json_decode($request->getContent());
+
         $entry = $request->entry;
+        $sender  = $entry[0]->messaging[0]->sender->id;
+        $message = $entry[0]->messaging[0]->message->text;
 
         Log::debug("Entry: " . json_encode($entry));
-        $sender  = $entry[0]->messaging[0]->sender->id;
         Log::debug("Sender id: " . $sender);
-        $message = $entry[0]->messaging[0]->message->text;
         Log::debug("Incoming message: " . $message);
 
         $this->dispatchResponse($sender, 'Hello world. You can customise my response.');

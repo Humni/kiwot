@@ -17,3 +17,7 @@ $app->get('/', function () use ($app) {
 
 $app->get('/webhook', 'BotController@verify_token');
 $app->post('/webhook', 'BotController@handle_query');
+
+
+
+$app->get('/dev/geophp', 'DevController@geophp');
