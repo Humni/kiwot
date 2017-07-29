@@ -94,7 +94,7 @@ class BotController extends Controller
             $conversation->lon = $location->long;
             $conversation->save();
 
-            $this->dispatchResponse($sender, "Arr, your the best! Now what do you want?");
+            $this->dispatchResponse($sender, "Arr, you're the best! Now what do you want?");
             return response('', 200);
         } else {
             //unknown respose
@@ -112,7 +112,7 @@ class BotController extends Controller
 
             //prompt the user with the first interactions
             $this->dispatchLocationRequest($sender);
-        } else if (empty($conversation->lat) || empty($conversation->lon) || $conversation->last_active->addDays(1) < Carbon::now()) {
+        } else if (empty($conversation->lat) || empty($conversation->lon) || Carbon::parse($conversation->last_active)->addDays(1) < Carbon::now()) {
             //prompt the user with the first interactions
             $this->dispatchLocationRequest($sender);
         } else {
