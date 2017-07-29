@@ -33,6 +33,7 @@ class BotController extends Controller
 
         Log::debug("External Token: " . $token);
         Log::debug("External Mode: " . $mode);
+        Log::debug("External All: " . $request->all(););
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
             return response($request->input('hub.challenge'));
         }
