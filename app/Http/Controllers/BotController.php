@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class BotController extends Controller
 {
