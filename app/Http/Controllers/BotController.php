@@ -60,9 +60,9 @@ class BotController extends Controller
         $entry = $request->entry;
         $sender  = $entry[0]->messaging[0]->sender->id;
         $message = $entry[0]->messaging[0]->message;
+        $message_text = "";
 
         $this->dispatchTyping($sender);
-
 
 
         //log the messages
@@ -74,10 +74,23 @@ class BotController extends Controller
 
         $this->current_message = $message_log;
 
-        //check for existing conversation with the user_id
+        /**
+         * First things first, we need the users location!
+         */
         $conversation = Conversations::where('user_id', $sender)->first();
+        if(empty($conversation)){
+            //create a new conversation
+            $conversation = new Conversations([
+                'user_id' => $sender,
+                'last_active' => Carbon::now()
+            ]);
 
-        //check for location info response
+            $conversation->save();
+        }
+
+        /**
+         * Lets first parse the incoming message data (e.g. if there is location data sent)
+         */
         if(isset($message->text)){
             $message_text = $message->text;
             $message_log->received = $message_text;
@@ -87,11 +100,12 @@ class BotController extends Controller
             Log::debug("Sender id: " . $sender);
             Log::debug("Incoming message: " . $message_text);
         } else if(isset($message->attachments)){
-            //this is a location response
+            //update the users location
             $location = $message->attachments[0]->payload->coordinates;
 
             $conversation->lat = $location->lat;
             $conversation->lon = $location->long;
+            $conversation->last_active = Carbon::now();
             $conversation->save();
 
             $this->dispatchResponse($sender, "Arr, you're the best! Now what do you want?");
@@ -100,22 +114,19 @@ class BotController extends Controller
             //unknown respose
             $this->dispatchResponse($sender, "Arrg! We don't know what you just sent us!");
         }
+        /**
+         * Finished parsing input data
+         */
 
-        if(empty($conversation)){
-            //create a new conversation
-            $conversation = new Conversations([
-                'user_id' => $sender,
-                'last_active' => Carbon::now()
-            ]);
 
-            $conversation->save();
-
-            //prompt the user with the first interactions
-            $this->dispatchLocationRequest($sender);
-        } else if (empty($conversation->lat) || empty($conversation->lon) || Carbon::parse($conversation->last_active)->addDays(1) < Carbon::now()) {
-            //prompt the user with the first interactions
+        /**
+         * Now lets look at what to reply
+         */
+        if (empty($conversation->lat) || empty($conversation->lon) || Carbon::parse($conversation->last_active)->addDays(1) < Carbon::now()) {
+            //looks like we need the users location
             $this->dispatchLocationRequest($sender);
         } else {
+            //otherwise, try reply with some useful information
             $conversation->last_active = Carbon::now();
             $conversation->save();
 
@@ -125,6 +136,9 @@ class BotController extends Controller
             //send the reply
             $this->dispatchResponse($sender, $reply);
         }
+        /**
+         * Reply should have been sent by now
+         */
 
         return response('', 200);
     }
