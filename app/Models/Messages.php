@@ -8,7 +8,7 @@ class Messages extends Model
 {
     protected $table = 'messages';
 
-    protected $primaryKey = 'messsage_id';
+    protected $primaryKey = 'message_id';
 
     protected $fillable = ['user_id','received','replied'];
 }
