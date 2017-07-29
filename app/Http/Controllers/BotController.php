@@ -55,7 +55,7 @@ class BotController extends Controller
         $sender  = array_get($entry, '0.messaging.0.sender.id');
         // $message = array_get($entry, '0.messaging.0.message.text');
 
-        $this->dispatchResponse($sender, 'Hello world. You can customise my response.');
+        $this->dispatchResponse('Hello world. You can customise my response.');
 
         return response('', 200);
     }
@@ -67,13 +67,14 @@ class BotController extends Controller
      * @param  string  $response
      * @return bool
      */
-    protected function dispatchResponse($id, $response)
+    //protected function dispatchResponse($id, $response)
+    protected function dispatchResponse($response)
     {
         $access_token = env('BOT_PAGE_ACCESS_TOKEN');
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token={$access_token}";
 
         $data = json_encode([
-            'recipient' => ['id' => $id],
+//            'recipient' => ['id' => $id],
             'message'   => ['text' => $response]
         ]);
 
