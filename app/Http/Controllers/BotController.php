@@ -59,31 +59,48 @@ class BotController extends Controller
 
         $entry = $request->entry;
         $sender  = $entry[0]->messaging[0]->sender->id;
-        $message = $entry[0]->messaging[0]->message->text;
-
-        Log::debug("Entry: " . json_encode($entry));
-        Log::debug("Sender id: " . $sender);
-        Log::debug("Incoming message: " . $message);
+        $message = $entry[0]->messaging[0]->message;
 
         $this->dispatchTyping($sender);
 
-        //Do all the processing in here
+
 
         //log the messages
         $message_log = new Messages([
-            'user_id' => $sender,
-            'received' => $message
+            'user_id' => $sender
         ]);
 
         $message_log->save();
 
         $this->current_message = $message_log;
 
-        //TODO check for location info response
-
-
         //check for existing conversation with the user_id
         $conversation = Conversations::where('user_id', $sender)->first();
+
+        //check for location info response
+        if(isset($message->text)){
+            $message_text = $message->text;
+            $message_log->received = $message_text;
+            $message_log->save();
+
+            Log::debug("Entry: " . json_encode($entry));
+            Log::debug("Sender id: " . $sender);
+            Log::debug("Incoming message: " . $message_text);
+        } else if(isset($message->attachments)){
+            //this is a location response
+            $location = $message->attachments[0]->payload->coordinates;
+
+            $conversation->lat = $location->lat;
+            $conversation->lon = $location->lon;
+            $conversation->save();
+
+            $this->dispatchResponse($sender, "Arr, your the best! Now what do you want?");
+            return response('', 200);
+        } else {
+            //unknown respose
+            $this->dispatchResponse($sender, "Arrg! We don't know what you just sent us!");
+        }
+
         if(empty($conversation)){
             //create a new conversation
             $conversation = new Conversations([
@@ -103,7 +120,7 @@ class BotController extends Controller
             $conversation->save();
 
             //get the appropriate reply
-            $reply = TextHelper::readMessage($message);
+            $reply = TextHelper::readMessage($message_text);
 
             //send the reply
             $this->dispatchResponse($sender, $reply);
