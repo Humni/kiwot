@@ -79,6 +79,8 @@ class BotController extends Controller
 
         $this->current_message = $message_log;
 
+        //TODO check for location info response
+
 
         //check for existing conversation with the user_id
         $conversation = Conversations::where('user_id', $sender)->first();
@@ -88,8 +90,12 @@ class BotController extends Controller
                 'user_id' => $sender,
                 'last_active' => Carbon::now()
             ]);
+
             $conversation->save();
 
+            //prompt the user with the first interactions
+            $this->dispatchLocationRequest($sender);
+        } else if (empty($conversation->lat) || empty($conversation->lon) || $conversation->last_active->addDays(1) < Carbon::now()) {
             //prompt the user with the first interactions
             $this->dispatchLocationRequest($sender);
         } else {
