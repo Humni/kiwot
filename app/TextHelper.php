@@ -3,6 +3,7 @@ namespace App;
 
 use App\FacebookMessage;
 use App\Models\Drowning;
+use App\Models\HuntingAreas;
 use stdClass;
 use App\HuntingHelper;
 use geoPHP;
