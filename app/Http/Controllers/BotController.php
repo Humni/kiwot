@@ -48,7 +48,7 @@ class BotController extends Controller
      */
     public function handle_query(Request $request)
     {
-        Log::debug("Handle JSON:: Request body: " . json_encode($request->getContent()));
+        dd($request->getContent());
         $request = $request->getContent();
         $entry = $request['entry'];
 
