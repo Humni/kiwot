@@ -64,6 +64,34 @@ class BotController extends Controller
         return response('', 200);
     }
 
+
+    /**
+     * Post a message to the Facebook messenger API.
+     *
+     * @param  integer $id
+     * @param  string  $response
+     * @return bool
+     */
+    protected function dispatchTyping($id)
+    {
+        $access_token = env('BOT_PAGE_ACCESS_TOKEN');
+        $url = "https://graph.facebook.com/v2.10/me/messages?access_token={$access_token}";
+
+        $data = json_encode([
+            'recipient' => ['id' => $id],
+            "sender_action" => "typing_on"
+        ]);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
+    }
+
     /**
      * Post a message to the Facebook messenger API.
      *
@@ -78,7 +106,8 @@ class BotController extends Controller
 
         $data = json_encode([
             'recipient' => ['id' => $id],
-            'message'   => ['text' => $response]
+            'message'   => ['text' => $response],
+            "sender_action" => "typing_off"
         ]);
 
         $ch = curl_init($url);

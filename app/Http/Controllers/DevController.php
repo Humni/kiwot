@@ -13,6 +13,6 @@ class DevController extends Controller
         if(geoPHP::geosInstalled()) {
             return response("We can't work anything out at the moment!", 200);
         }
-        return response("GEOS Version" . PHP_EOL . "GeoPHP is not installed: " . json_encode(geoPHP::geosInstalled()), 400);
+        return response("GeoPHP installed: " . json_encode(geoPHP::geosInstalled()), 400);
     }
 }
