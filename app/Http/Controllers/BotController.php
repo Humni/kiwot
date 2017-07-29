@@ -34,7 +34,7 @@ class BotController extends Controller
         Log::debug("$token: " . json_encode($token));
 
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
-            return response($_GET['hub.challenge']);
+            return response($_GET['hub_challenge']);
         }
 
         return response("Invalid token!", 400);
