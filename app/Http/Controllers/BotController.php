@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Conversations;
+use App\Models\Drowning;
 use App\Models\Messages;
 use App\TextHelper;
 use Carbon\Carbon;
 use Log;
+use geoPHP;
 use Illuminate\Http\Request;
 
 class BotController extends Controller
@@ -115,8 +117,8 @@ class BotController extends Controller
             }
             return response('', 200);
         } else {
-            //unknown respose
-            $this->dispatchResponse($sender, "Arrg! We don't know what you just sent us!");
+            //unknown response
+            $this->dispatchResponse($sender, "Arr! We don't know what you just sent us!");
         }
         /**
          * Finished parsing input data
@@ -135,7 +137,7 @@ class BotController extends Controller
             $conversation->save();
 
             //get the appropriate reply
-            $reply = TextHelper::readMessage($message_text);
+            $reply = TextHelper::readMessage($message_text, $conversation->lat, $conversation->lon);
 
             //send the reply
             $this->dispatchResponse($sender, $reply);

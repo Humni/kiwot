@@ -2,8 +2,10 @@
 namespace App;
 
 use App\FacebookMessage;
+use App\Models\Drowning;
 use stdClass;
 use App\HuntingHelper;
+use geoPHP;
 
 class TextHelper {
 
@@ -33,8 +35,10 @@ class TextHelper {
      * Get the appropriate reply
      *
      * @param $inMessage
+     * @return string
      */
-    public static function readMessage($inMessage) {
+    public static function readMessage($inMessage, $lat, $long)
+    {
         $message = "Error! This wasn't supposed to happen";
 
         if (strpos(strtolower($inMessage), 'can') !== false) {
@@ -67,7 +71,7 @@ class TextHelper {
                 //$message = HuntingHelper::hunt();
 
             } else if ($type == "SWIM") {
-                $message = "SWIMMING";
+                $message = TextHelper::drownings($lat, $long);
 
             } else if ($type == 'FISH') {
                 $message = "FISHING";
@@ -75,31 +79,58 @@ class TextHelper {
             } else {
                 //$message = FacebookMessage::create();
                 $message = "I don't know the answer to that question. " . TextHelper::returnQuestionsText($array);
-
-
             }
-
-
 
 
         } else if ($mode == "thank") {
             //$message = FacebookMessage::create();
             $message = "You're welcome.";
 
-
         } else if ($mode == "um") {
-
           //  $message = FacebookMessage::create();
             $message = "Yikes! I'm not sure what you mean by that...";
-
 
         } else {
          //   $message = FacebookMessage::create();
             $message = "Yikes! I'm not sure what you mean.";
-
         }
 
          return $message;
+    }
+
+
+    /**
+     * Drowning helper function
+     */
+    public static function drownings($lat, $long) {
+        // Parse the user location into a geoPHO point
+        $userLocation = geoPHP::load("POINT(" . $lat . " " . $long . ")", "wkt");
+
+        $closeness = .01;
+
+        $xSmall = $long - $closeness;
+        $xLarge = $long + $closeness;
+
+        $ySmall = $lat - $closeness;
+        $yLarge = $lat + $closeness;
+
+        // Do a basic prefilter on the latitude.
+        $allLocations = Drowning::where('x', '>', $xSmall)->where('x', '<', $xLarge)->where('y', '>', $ySmall)->where('y', '<', $yLarge)->get();
+
+        $output = "";
+        // Look through the possible locations, and see if the point is in the block.
+        foreach ($allLocations as $location) {
+
+            $output .= "A drowning occurred from " . $location->Activity . " in " . $location->Year . " near here.  ";
+
+
+        }
+
+        if ($output != '') {
+            return $output;
+        }
+
+        return "Great news - no drownings have taken place near you - however, you should always check for rips, and currents. You can learn more about water safety here: http://www.watersafety.org.nz/resources-and-safety-tips/ ";
     }
 
 }
