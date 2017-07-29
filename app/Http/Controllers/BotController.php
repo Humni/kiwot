@@ -30,13 +30,15 @@ class BotController extends Controller
         $mode  = $request->get('hub.mode');
         $token = $request->get('hub.verify_token');
 
-        echo $request->get('hub_mode');
-        echo $request->get('hub_verify_token');
+        $modei  = $request->input('hub.mode');
+        $tokeni = $request->input('hub.verify_token');
 
-        echo json_encode($request->all());
+        Log::debug("Request: " . json_encode($request));
+        Log::debug("$mode: " . json_encode($mode));
+        Log::debug("$token: " . json_encode($token));
+        Log::debug("$modei: " . json_encode($modei));
+        Log::debug("$tokeni: " . json_encode($tokeni));
 
-        echo ("External Token: " . $token . PHP_EOL);
-        echo ("External Mode: " . $mode . PHP_EOL);
         if ($mode === "subscribe" && $this->token and $token === $this->token) {
             return response($request->get('hub.challenge'));
         }
