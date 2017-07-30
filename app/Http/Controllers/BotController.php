@@ -142,7 +142,7 @@ class BotController extends Controller
             $conversation->save();
 
             //get the nlp from Wit.AI to check what message we are looking for
-            if(isset($message->nlp) && isset($message->entities) && isset($message->entities->intent)){
+            if(isset($message->nlp) && isset($message->nlp->entities) && isset($message->nlp->entities->intent)){
                 $intent = $message->entities->intent[0];
                 Log::debug(json_encode($intent));
                 if($intent->confidence > 0.8){
