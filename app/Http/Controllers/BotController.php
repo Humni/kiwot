@@ -145,7 +145,7 @@ class BotController extends Controller
             Log::debug("NLP: " . json_encode($message->nlp));
             if (isset($message->nlp) && isset($message->nlp->entities)) {
                 if (isset($message->nlp->entities->intent)) {
-                    $intent = $message->entities->intent[0];
+                    $intent = $message->nlp->entities->intent[0];
                     if ($intent->confidence > 0.8) {
                         switch ($intent->value) {
                             case 'fish':
@@ -167,7 +167,7 @@ class BotController extends Controller
                 }
 
                 if (isset($message->nlp->entities->greetings)) {
-                    $intent = $message->entities->greetings[0];
+                    $intent = $message->nlp->entities->greetings[0];
                     if ($intent->confidence > 0.8) {
                         $this->dispatchResponse($sender, "Welcome back matey!");
                         return response('', 200);
@@ -175,7 +175,7 @@ class BotController extends Controller
                 }
 
                 if (isset($message->nlp->entities->bye)) {
-                    $intent = $message->entities->bye[0];
+                    $intent = $message->nlp->entities->bye[0];
                     if ($intent->confidence > 0.8) {
                         $this->dispatchResponse($sender, "Until next time! Arrr...");
                         return response('', 200);
@@ -183,7 +183,7 @@ class BotController extends Controller
                 }
 
                 if (isset($message->nlp->entities->thanks)) {
-                    $intent = $message->entities->thanks[0];
+                    $intent = $message->nlp->entities->thanks[0];
                     if ($intent->confidence > 0.8) {
                         $this->dispatchResponse($sender, "Arr! You're welcome Matey!");
                         return response('', 200);
