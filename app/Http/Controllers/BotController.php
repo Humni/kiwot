@@ -87,6 +87,10 @@ class BotController extends Controller
                 'last_active' => Carbon::now()
             ]);
 
+            //send welcome messages
+            $this->dispatchResponse($sender, "Ahoy Matey, I am Captain Jack!");
+            $this->dispatchResponse($sender, "My areas of expertise include hunting, fishing and swimming.");
+
             $conversation->save();
         }
 
@@ -112,6 +116,7 @@ class BotController extends Controller
                 $conversation->save();
 
                 $this->dispatchResponse($sender, "Arr, you're the best! Now what do you want?");
+                $this->dispatchResponse($sender, "Ask me something like 'Can I hunt here?'");
             } else {
                 $this->dispatchResponse($sender, "Arr, that is pretty cool!");
             }
