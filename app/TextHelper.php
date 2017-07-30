@@ -4,6 +4,7 @@ namespace App;
 use App\FacebookMessage;
 use App\Models\Drowning;
 use App\Models\HuntingAreas;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 use App\HuntingHelper;
 use geoPHP;
@@ -144,6 +145,7 @@ class TextHelper {
 
         // Do a basic prefilter on the latitude.
         $allLocations = HuntingAreas::where('miny', '<', $lat)->where('maxy', '>', $lat)->get();
+        Log::debug(count($allLocations));
 
         if (!geoPHP::geosInstalled()) {
             return "We can't work anything out at the moment!";
