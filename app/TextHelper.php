@@ -157,6 +157,8 @@ class TextHelper {
                 return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
             }
         }
+
+        return "You are not in any DOC hunting areas, which means you will need to ask the land owner first if you can hunt in your current location. ";
     }
 }
 
