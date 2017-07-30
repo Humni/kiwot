@@ -77,7 +77,7 @@ class TextHelper {
                 $message = TextHelper::drownings($lat, $long);
 
             } else if ($type == 'FISH') {
-                $message = "FISHING";
+                $message = TextHelper::fishing($lat, $long);
 
             } else {
                 //$message = FacebookMessage::create();
