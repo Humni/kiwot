@@ -143,8 +143,11 @@ class TextHelper {
         // Parse the user location into a geoPHO point
         $userLocation = geoPHP::load("POINT(" . $lat . " " . $long . ")", "wkt");
 
-        // Do a basic prefilter on the latitude.
-        $allLocations = HuntingAreas::where('miny', '<', $lat)->where('maxy', '>', $lat)->get();
+        // Do a basic pre-filter on the latitude.
+        $allLocations = HuntingAreas::where('miny', '<', $lat)
+                ->where('maxy', '>', $lat)
+                ->where('minx', '<', $long)
+                ->where('maxy', '>', $long)->get();
         Log::debug(count($allLocations));
 
         if (!geoPHP::geosInstalled()) {
@@ -155,9 +158,9 @@ class TextHelper {
         foreach ($allLocations as $location) {
 
             $geo = geoPHP::load($location->WKT, 'wkt');
-            if ($geo->contains($userLocation)) {
+            //if ($geo->contains($userLocation)) {
                 return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
-            }
+            //}
         }
 
         return "You are not in any DOC hunting areas, which means you will need to ask the land owner first if you can hunt in your current location. ";
