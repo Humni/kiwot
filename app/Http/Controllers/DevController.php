@@ -187,6 +187,42 @@ class DevController extends Controller
             array('swim',"has anyone drowned here"),
             array('swim',"where can I swim"),
             array('swim',"swim"),
+
+            //Bots tend to get a bit of insults as they aren't human. We are just making sure we know how to respond to it
+            array('help',"You’re a cunt, mate"),
+            array('help',"You are a douche bag"),
+            array('help',"Stupid idiot"),
+            array('help',"You are dumb"),
+            array('help',"You are a waste of space"),
+            array('help',"You are a useless android"),
+            array('help',"fuck"),
+            array('help',"shit"),
+            array('help',"wanker"),
+            array('help',"useless"),
+
+            //Bots tend to get a bit of insults as they aren't human. We are just making sure we know how to respond to it
+            array('help',"help"),
+            array('help',"what can you do"),
+            array('help',"who are you"),
+            array('help',"um"),
+            array('help',"hmm"),
+            array('help',"are you there"),
+            array('help',"what are you doing"),
+            array('help',"how are you"),
+            array('help',"why are you named captain jack"),
+            array('help',"What is your name?"),
+            array('help',"Who is god?"),
+            array('help',"What is the day today?"),
+            array('help',"My name is bob"),
+            array('help',"Ten miles and poles apart"),
+            array('help',"Where worlds collide and days are dark"),
+            array('help',"But you’ll never have my heart"),
+            array('help',"I heard that you settled down"),
+            array('help',"Go ‘head and detox and I’ll lay your ship bare"),
+            array('help',"The quick brown fox"),
+            array('help',"Don’t underestimate the things that I will do"),
+            array('help',"Innovation at waikato university"),
+            array('help',"We’ve used Career Central for the past year and fully endorse the programme.")
         );
 
         $testing = array(
@@ -241,27 +277,9 @@ class DevController extends Controller
 
     private function getConfidence(MultinomialNBClassifier $cls, $class, DocumentInterface $d, $tokenCount)
     {
-//        $score = log($this->model->getPrior($class));
-//        $features = $this->feature_factory->getFeatureArray($class, $d);
-//        if (is_int(key($features)))
-//            $features = array_count_values($features);
-//        foreach ($features as $f => $fcnt) {
-//            $score += $fcnt * log($this->model->getCondProb($f, $class));
-//        }
-////        return $score;
-//        $score = log($cls->model->getPrior($class));
-//        $features = $cls->feature_factory->getFeatureArray($class, $d);
-//        if (is_int(key($features)))
-//            $features = array_count_values($features);
-//
-//        foreach ($features as $f => $fcnt) {
-//            $score += $fcnt * log($cls->model->getCondProb($f, $class));
-//        }
-
         $score = $cls->getScore($class, $d);
 
         print($score.PHP_EOL);
-//        print($tokenCount.PHP_EOL);
         return ($score/$tokenCount);
     }
 }
