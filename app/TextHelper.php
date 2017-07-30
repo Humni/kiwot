@@ -3,6 +3,7 @@ namespace App;
 
 use App\FacebookMessage;
 use App\Models\Drowning;
+use App\Models\FishingAreas;
 use App\Models\HuntingAreas;
 use Illuminate\Support\Facades\Log;
 use stdClass;
@@ -145,24 +146,42 @@ class TextHelper {
 
         // Do a basic pre-filter on the latitude.
         $allLocations = HuntingAreas::where('miny', '<', $lat)
-                ->where('maxy', '>', $lat)
-                ->where('minx', '<', $long)
-                ->where('maxx', '>', $long)->get();
-
-        if (!geoPHP::geosInstalled()) {
-            return "We can't work anything out at the moment!";
-        }
+            ->where('maxy', '>', $lat)
+            ->where('minx', '<', $long)
+            ->where('maxx', '>', $long)->get();
 
         // Look through the possible locations, and see if the point is in the block.
         foreach ($allLocations as $location) {
 
             $geo = geoPHP::load($location->WKT, 'wkt');
             //if ($geo->contains($userLocation)) {
-                return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
+            return "You can hunt here! You are in the " . $location->HuntBlockName . " area.  Remember though - you will need a permit first. ";
             //}
         }
 
         return "You are not in any DOC hunting areas, which means you will need to ask the land owner first if you can hunt in your current location. ";
+    }
+
+
+    /**
+     * Drowning helper function
+     */
+    public static function fishing($lat, $long) {
+        // Parse the user location into a geoPHO point
+        $userLocation = geoPHP::load("POINT(" . $lat . " " . $long . ")", "wkt");
+
+        // Do a basic pre-filter on the latitude.
+        $allLocations = FishingAreas::where('miny', '<', $lat)
+            ->where('maxy', '>', $lat)
+            ->where('minx', '<', $long)
+            ->where('maxx', '>', $long)->get();
+
+        // Look through the possible locations, and see if the point is in the block.
+        foreach ($allLocations as $location) {
+            return "You can't fish here! You are in the " . $location->Name . ". ";
+        }
+
+        return "It doesn't look like you're near any marine reserves! You're free to fish, but make sure you stay within those catch limits!";
     }
 }
 
