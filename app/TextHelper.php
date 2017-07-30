@@ -147,7 +147,7 @@ class TextHelper {
         $allLocations = HuntingAreas::where('miny', '<', $lat)
                 ->where('maxy', '>', $lat)
                 ->where('minx', '<', $long)
-                ->where('maxy', '>', $long)->get();
+                ->where('maxx', '>', $long)->get();
         Log::debug(count($allLocations));
         Log::debug($lat);
         Log::debug($long);
