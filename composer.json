@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "5.4.*",
         "vlucas/phpdotenv": "~2.2",
         "phayes/geoPHP": "^1.2",
-        "toin0u/geotools-laravel": "^1.0"
+        "toin0u/geotools-laravel": "^1.0",
+        "nlp-tools/nlp-tools": "^0.1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -149,6 +149,8 @@ class TextHelper {
                 ->where('minx', '<', $long)
                 ->where('maxy', '>', $long)->get();
         Log::debug(count($allLocations));
+        Log::debug($lat);
+        Log::debug($long);
 
         if (!geoPHP::geosInstalled()) {
             return "We can't work anything out at the moment!";
