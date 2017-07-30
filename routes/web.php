@@ -19,5 +19,6 @@ $app->get('/webhook', 'BotController@verify_token');
 $app->post('/webhook', 'BotController@handle_query');
 
 
+$app->get('/dev/train_nlp', 'DevController@train_nlp');
 $app->get('/dev/geophp', 'DevController@geophp');
 $app->get('/devTest', 'DevController@parseMessage');
