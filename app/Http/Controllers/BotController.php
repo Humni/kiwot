@@ -144,6 +144,7 @@ class BotController extends Controller
             //get the nlp from Wit.AI to check what message we are looking for
             if(isset($message->nlp) && isset($message->entities) && isset($message->entities->intent)){
                 $intent = $message->entities->intent[0];
+                Log::debug(json_encode($intent));
                 if($intent->confidence > 0.8){
                     switch($intent->value){
                         case 'fish':
