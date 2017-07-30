@@ -163,7 +163,7 @@ class BotController extends Controller
                                 break;
                         }
                     }
-                } else if(isset($message->nlp->entities->greeting)){
+                } else if(isset($message->nlp->entities->greetings)){
                     $this->dispatchResponse($sender, "Welcome back matey!");
                 } else if(isset($message->nlp->entities->bye)){
                     $this->dispatchResponse($sender, "Until next time! Arrr...");
