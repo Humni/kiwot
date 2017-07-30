@@ -141,11 +141,42 @@ class BotController extends Controller
             $conversation->last_active = Carbon::now();
             $conversation->save();
 
-            //get the appropriate reply
-            $reply = TextHelper::readMessage($message_text, $conversation->lat, $conversation->lon);
+            //get the nlp from Wit.AI to check what message we are looking for
+            if(isset($message->nlp) && isset($message->entities) && isset($message->entities->intent)){
+                $intent = $message->entities->intent[0];
+                if($intent->confidence > 0.8){
+                    switch($intent->value){
+                        case 'fish':
+                            $this->dispatchResponse($sender, TextHelper::fishing($conversation->lat, $conversation->lon));
+                            break;
+                        case 'hunt':
+                            $this->dispatchResponse($sender, TextHelper::hunting($conversation->lat, $conversation->lon));
+                            break;
+                        case 'swim':
+                            $this->dispatchResponse($sender, TextHelper::drownings($conversation->lat, $conversation->lon));
+                            break;
+                        case 'greeting':
+                            $this->dispatchResponse($sender, "Welcome back matey!");
+                            break;
+                        case 'bye':
+                            $this->dispatchResponse($sender, "Until next time! Arrr...");
+                            break;
+                        case 'thanks':
+                            $this->dispatchResponse($sender, "Arr! You're welcome Matey!");
+                            break;
+                        default:
+                            $this->dispatchResponse($sender, "Arr! We don't know what you just sent us!");
+                            break;
+                    }
+                }
+            } else {
+                //otherwise do the normal parse
+                //get the appropriate reply
+                $reply = TextHelper::readMessage($message_text, $conversation->lat, $conversation->lon);
 
-            //send the reply
-            $this->dispatchResponse($sender, $reply);
+                //send the reply
+                $this->dispatchResponse($sender, $reply);
+            }
         }
         /**
          * Reply should have been sent by now
