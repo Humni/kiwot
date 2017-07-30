@@ -143,33 +143,34 @@ class BotController extends Controller
 
             //get the nlp from Wit.AI to check what message we are looking for
             Log::debug(json_encode($message->nlp));
-            if(isset($message->nlp) && isset($message->nlp->entities) && isset($message->nlp->entities->intent)){
-                $intent = $message->entities->intent[0];
-                Log::debug(json_encode($intent));
-                if($intent->confidence > 0.8){
-                    switch($intent->value){
-                        case 'fish':
-                            $this->dispatchResponse($sender, TextHelper::fishing($conversation->lat, $conversation->lon));
-                            break;
-                        case 'hunt':
-                            $this->dispatchResponse($sender, TextHelper::hunting($conversation->lat, $conversation->lon));
-                            break;
-                        case 'swim':
-                            $this->dispatchResponse($sender, TextHelper::drownings($conversation->lat, $conversation->lon));
-                            break;
-                        case 'greeting':
-                            $this->dispatchResponse($sender, "Welcome back matey!");
-                            break;
-                        case 'bye':
-                            $this->dispatchResponse($sender, "Until next time! Arrr...");
-                            break;
-                        case 'thanks':
-                            $this->dispatchResponse($sender, "Arr! You're welcome Matey!");
-                            break;
-                        default:
-                            $this->dispatchResponse($sender, "Arr! We don't know what you just sent us!");
-                            break;
+            if(isset($message->nlp) && isset($message->nlp->entities)){
+                if(isset($message->nlp->entities->intent)){
+                    $intent = $message->entities->intent[0];
+                    Log::debug(json_encode($intent));
+                    if($intent->confidence > 0.8){
+                        switch($intent->value){
+                            case 'fish':
+                                $this->dispatchResponse($sender, TextHelper::fishing($conversation->lat, $conversation->lon));
+                                break;
+                            case 'hunt':
+                                $this->dispatchResponse($sender, TextHelper::hunting($conversation->lat, $conversation->lon));
+                                break;
+                            case 'swim':
+                                $this->dispatchResponse($sender, TextHelper::drownings($conversation->lat, $conversation->lon));
+                                break;
+                            default:
+                                $this->dispatchResponse($sender, "Arr! We don't know what you just sent us!");
+                                break;
+                        }
                     }
+                } else if(isset($message->nlp->entities->greeting)){
+                    $this->dispatchResponse($sender, "Welcome back matey!");
+                } else if(isset($message->nlp->entities->bye)){
+                    $this->dispatchResponse($sender, "Until next time! Arrr...");
+                } else if(isset($message->nlp->entities->thanks)){
+                    $this->dispatchResponse($sender, "Arr! You're welcome Matey!");
+                } else {
+                    $this->dispatchResponse($sender, "Arr! We don't know what you just sent us!");
                 }
             } else {
                 //otherwise do the normal parse
